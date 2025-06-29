@@ -33,7 +33,7 @@ const Checkout = () => {
                   <span class="font-semibold">{product.title}</span>
                   <span class="float-right text-gray-400 flex items-center">
                     ${product.price}
-                    <FaTimes className="text-sm" />
+                    {" "}x{" "}
                     {product.quantity}
                   </span>
                   <p class="text-lg font-bold">

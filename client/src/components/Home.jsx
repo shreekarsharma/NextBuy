@@ -2,6 +2,7 @@ import ProductsGrid from "./ProductsGrid";
 import { useSearch } from "../context/searchContext";
 const Home = () => {
   const { searchTerm, setSearchTerm } = useSearch();
+
   return (
     <div className="mx-auto max-w-screen-lg">
       <div className="relative h-70 rounded-b-lg bg-cover bg-center bg-no-repeat shadow-lg bg-[url(https://static.vecteezy.com/system/resources/previews/011/871/820/non_2x/online-shopping-on-phone-buy-sell-business-digital-web-banner-application-money-advertising-payment-ecommerce-illustration-search-vector.jpg)]">

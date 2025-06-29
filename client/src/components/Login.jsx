@@ -7,19 +7,33 @@ const Login = () => {
   const [form, setForm] = useState({
     emailAddress: "",
     passWord: "",
+    userName: "",
   });
   const navigate = useNavigate();
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setForm((form) => ({ ...form, [name]: value }));
+    setForm((form) => ({ ...form, [name]: value.trimStart() }));
   };
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      await axios.post(`${import.meta.env.VITE_API_BASE_URL}/auth/login`, form);
-      await login(form);
-      alert("Login Successful");
-      navigate("/");
+      if (
+        form.emailAddress === "" ||
+        form.passWord === "" ||
+        form.userName === ""
+      ) {
+        alert("Please fill the details");
+        return;
+      } else {
+        await axios.post(
+          `${import.meta.env.VITE_API_BASE_URL}/auth/login`,
+          form
+        );
+        await login(form);
+        alert("Login Successful");
+        navigate("/");
+        window.location.reload();
+      }
     } catch (error) {
       alert("User not found. Please Register.");
       navigate("/signup");
@@ -39,8 +53,11 @@ const Login = () => {
           type="text"
           placeholder="username"
           name="userName"
+          pattern="^[a-zA-Z0-9_]{4,}$"
+          title="Username must be at least 4 characters, no spaces"
           className="mt-2 h-12 w-full rounded-md bg-gray-100 px-3 focus:outline-sky-600"
           onChange={handleChange}
+          required
         />
       </div>
       <div className="">
@@ -51,6 +68,7 @@ const Login = () => {
           name="emailAddress"
           className="mt-2 h-12 w-full rounded-md bg-gray-100 px-3 focus:outline-sky-600"
           onChange={handleChange}
+          required
         />
       </div>
       <div>
@@ -59,8 +77,11 @@ const Login = () => {
           type="password"
           placeholder="**********"
           name="passWord"
+          pattern=".{6,}"
+          title="Password must be at least 6 characters"
           className="mt-2 h-12 w-full rounded-md bg-gray-100 px-3 focus:outline-sky-600"
           onChange={handleChange}
+          required
         />
       </div>
       <div>

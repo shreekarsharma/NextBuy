@@ -22,17 +22,29 @@ const Signup = () => {
       formData.append("profilePhoto", file);
     }
     try {
-      await axios.post(
-        `${import.meta.env.VITE_API_BASE_URL}/auth/signup`,
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
-      alert("Signup Successful, Now you can login");
-      navigate("/login");
+      if (
+        form.fullName === "" ||
+        form.userName === "" ||
+        form.emailAddress === "" ||
+        form.phoneNumber === "" ||
+        form.passWord === "" ||
+        !file
+      ) {
+        alert("Please fill the details");
+        return;
+      } else {
+        await axios.post(
+          `${import.meta.env.VITE_API_BASE_URL}/auth/signup`,
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+        alert("Signup Successful, Now you can login");
+        navigate("/login");
+      }
     } catch (error) {
       alert("User already exists. Please login.");
       navigate("/login");
@@ -43,7 +55,7 @@ const Signup = () => {
     const { name, value } = e.target;
     setForm((form) => ({
       ...form,
-      [name]: value,
+      [name]: value.trimStart(),
     }));
   };
   return (
@@ -61,8 +73,11 @@ const Signup = () => {
           type="text"
           name="fullName"
           placeholder="John Doe"
+          pattern="^[A-Za-z ]{2,}$"
+          title="Full name should only contain letters and spaces"
           className="mt-2 h-12 w-full rounded-md bg-gray-100 px-3 focus:outline-sky-600"
           onChange={handleChange}
+          required
         />
       </div>
       <div>
@@ -71,8 +86,11 @@ const Signup = () => {
           type="text"
           name="userName"
           placeholder="johndoe"
+          pattern="^[a-zA-Z0-9_]{4,}$"
+          title="Username must be at least 4 characters, no spaces"
           className="mt-2 h-12 w-full rounded-md bg-gray-100 px-3 focus:outline-sky-600"
           onChange={handleChange}
+          required
         />
       </div>
       <div>
@@ -83,6 +101,7 @@ const Signup = () => {
           placeholder="username@example.com"
           className="mt-2 h-12 w-full rounded-md bg-gray-100 px-3 focus:outline-sky-600"
           onChange={handleChange}
+          required
         />
       </div>
       <div>
@@ -91,8 +110,11 @@ const Signup = () => {
           type="tel"
           name="phoneNumber"
           placeholder="1234567890"
+          pattern="[0-9]{10}"
+          title="Enter a valid 10-digit phone number"
           className="mt-2 h-12 w-full rounded-md bg-gray-100 px-3 focus:outline-sky-600"
           onChange={handleChange}
+          required
         />
       </div>
       <div>
@@ -101,8 +123,11 @@ const Signup = () => {
           type="password"
           name="passWord"
           placeholder="**********"
+          pattern=".{6,}"
+          title="Password must be at least 6 characters"
           className="mt-2 h-12 w-full rounded-md bg-gray-100 px-3 focus:outline-sky-600"
           onChange={handleChange}
+          required
         />
       </div>
       <div>
@@ -111,6 +136,7 @@ const Signup = () => {
           type="file"
           name="profilePhoto"
           accept="image/*"
+          required
           className="mt-2 h-12 w-full rounded-md bg-gray-100 px-3 focus:outline-sky-600"
           onChange={(e) => {
             setFile(e.target.files[0]);

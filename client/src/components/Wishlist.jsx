@@ -2,10 +2,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { clearWishList, removeFromWishList } from "../reducers/wishlistSlice";
 import { addToCart } from "../reducers/cartSlice";
 import { FaTimes } from "react-icons/fa";
-
 const Wishlist = () => {
   const wishListProducts = useSelector((state) => state.wishlist);
   const dispatch = useDispatch();
+
+
   if (wishListProducts.length < 1) {
     return (
       <p className="text-center mt-10 text-xl font-medium text-sky-950">
@@ -78,7 +79,7 @@ const Wishlist = () => {
                                 dispatch(removeFromWishList(product));
                               }}
                             >
-                              <FaTimes/>
+                              <FaTimes />
                             </button>
                           </div>
                         </div>

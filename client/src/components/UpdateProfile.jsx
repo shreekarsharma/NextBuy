@@ -49,27 +49,39 @@ const UpdateProfile = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const formData = new FormData();
-      for (const key in form) {
-        if (form[key]) formData.append(key, form[key]);
+      if (
+        form.fullName === "" ||
+        form.userName === "" ||
+        form.emailAddress === "" ||
+        form.phoneNumber === "" ||
+        !file
+      ) {
+        alert("Please fill the details");
+        return;
+      } else {
+        const formData = new FormData();
+        for (const key in form) {
+          if (form[key]) formData.append(key, form[key]);
+        }
+
+        const res = await axios.put(
+          `${import.meta.env.VITE_API_BASE_URL}/auth/user/id/${id}`,
+          formData,
+          { headers: { "Content-Type": "multipart/form-data" } }
+        );
+
+        alert("✅ Profile updated successfully");
+
+        const updatedUser = res.data.user;
+
+        setUser(updatedUser); // update context with actual data, not formData
+        localStorage.setItem("user", JSON.stringify(updatedUser)); // optional
+        console.log("🔁 Navigating to:", `/profile/${updatedUser.userName}`);
+        console.log("✅ Updated user:", updatedUser);
+
+        navigate(`/profile/${updatedUser.userName}`);
+        window.location.reload();
       }
-
-      const res = await axios.put(
-        `${import.meta.env.VITE_API_BASE_URL}/auth/user/id/${id}`,
-        formData,
-        { headers: { "Content-Type": "multipart/form-data" } }
-      );
-
-      alert("✅ Profile updated successfully");
-
-      const updatedUser = res.data.user;
-
-      setUser(updatedUser); // update context with actual data, not formData
-      localStorage.setItem("user", JSON.stringify(updatedUser)); // optional
-      console.log("🔁 Navigating to:", `/profile/${updatedUser.userName}`);
-      console.log("✅ Updated user:", updatedUser);
-
-      navigate(`/profile/${updatedUser.userName}`);
     } catch (error) {
       console.error("❌ Failed to update profile:", error);
       alert("Update failed. Check console.");
@@ -96,8 +108,11 @@ const UpdateProfile = () => {
           name="fullName"
           value={form.fullName}
           onChange={handleChange}
+          pattern="^[A-Za-z ]{2,}$"
+          title="Full name should only contain letters and spaces"
           placeholder="John Doe"
           className="mt-2 h-12 w-full rounded-md bg-gray-100 px-3 focus:outline-sky-600"
+          required
         />
       </div>
 
@@ -108,8 +123,11 @@ const UpdateProfile = () => {
           name="userName"
           value={form.userName}
           onChange={handleChange}
+          pattern="^[a-zA-Z0-9_]{4,}$"
+          title="Username must be at least 4 characters, no spaces"
           placeholder="johndoe"
           className="mt-2 h-12 w-full rounded-md bg-gray-100 px-3 focus:outline-sky-600"
+          required
         />
       </div>
 
@@ -122,6 +140,7 @@ const UpdateProfile = () => {
           onChange={handleChange}
           placeholder="username@example.com"
           className="mt-2 h-12 w-full rounded-md bg-gray-100 px-3 focus:outline-sky-600"
+          required
         />
       </div>
 
@@ -133,7 +152,10 @@ const UpdateProfile = () => {
           value={form.phoneNumber}
           onChange={handleChange}
           placeholder="1234567890"
+          pattern="[0-9]{10}"
+          title="Enter a valid 10-digit phone number"
           className="mt-2 h-12 w-full rounded-md bg-gray-100 px-3 focus:outline-sky-600"
+          required
         />
       </div>
 
@@ -145,6 +167,7 @@ const UpdateProfile = () => {
           accept="image/*"
           onChange={handleChange}
           className="mt-2 h-12 w-full rounded-md bg-gray-100 px-3 focus:outline-sky-600"
+          required
         />
       </div>
 

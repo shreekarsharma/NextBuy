@@ -7,8 +7,10 @@ export const rootReducer = combineReducers({
   cart: cartSlice,
   wishlist: wishlistSlice,
 });
+const user = JSON.parse(localStorage.getItem("user"));
+const userId = user?._id;
 const persistConfig = {
-  key: "root",
+  key: `user_${userId}`,
   storage,
 };
 const persistedReducer = persistReducer(persistConfig, rootReducer);

@@ -1,0 +1,25 @@
+{
+  "name": "nextbuy",
+  "version": "1.0.0",
+  "description": "A full-stack e-commerce web app built with MERN stack",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "concurrently \"npm run dev --prefix client\" \"npm run dev --prefix server\"",
+    "install:all": "npm install && npm install --prefix client && npm install --prefix server"
+  },
+  "keywords": [
+    "ecommerce",
+    "mern",
+    "react",
+    "nodejs",
+    "mongodb",
+    "nextbuy"
+  ],
+  "author": "Shreekar Sharma",
+  "license": "ISC",
+  "type": "module",
+  "dependencies": {
+    "concurrently": "^9.2.0"
+  }
+}

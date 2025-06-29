@@ -127,11 +127,4 @@ From server folder:
 
 ## 🧑‍💻 Author
 
-**Shreekar Sharma**  
-Built as part of a MERN Stack course and submitted on 2nd July for evaluation.
-
----
-
-## 🏆 Certificate of Excellence
-
-This project is presented to the trainer to earn the Certificate of Excellence.
+**Shreekar Sharma**

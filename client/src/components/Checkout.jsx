@@ -2,6 +2,7 @@ import { FaTimes } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { clearCart } from "../reducers/cartSlice";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 const Checkout = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -10,33 +11,61 @@ const Checkout = () => {
     (total, product) => total + product.quantity * product.price,
     0
   );
-  const handleCheckout = () => {
-    alert("✅ Order Placed Successfully");
-    dispatch(clearCart());
-    navigate("/");
-  };
   const shippingCharge = 8;
+  const [form, setForm] = useState({
+    email: "",
+    cardHolder: "",
+    cardNumber: "",
+    expiry: "",
+    cvc: "",
+    address: "",
+    state: "",
+    zip: "",
+  });
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setForm((prev) => ({ ...prev, [name]: value }));
+  };
+  const handleCheckout = () => {
+    const { email, cardHolder, cardNumber, expiry, cvc, address, state, zip } =
+      form;
+    if (
+      email === "" ||
+      cardHolder === "" ||
+      cardNumber === "" ||
+      expiry === "" ||
+      cvc === "" ||
+      address === "" ||
+      state === "" ||
+      zip === ""
+    ) {
+      alert("❌ Please fill in all required fields.");
+      return;
+    } else {
+      alert("✅ Order Placed Successfully");
+      dispatch(clearCart());
+      navigate("/");
+    }
+  };
   return (
     <div>
-      <div class="grid sm:px-10 lg:grid-cols-2 lg:px-20 xl:px-32">
-        <div class="px-4 pt-8">
-          <p class="text-xl font-medium">Order Summary</p>
-          <div class="mt-8 space-y-3 rounded-lg border bg-white px-2 py-4 sm:px-6">
+      <div className="grid sm:px-10 lg:grid-cols-2 lg:px-20 xl:px-32">
+        <div className="px-4 pt-8">
+          <p className="text-xl font-medium">Order Summary</p>
+          <div className="mt-8 space-y-3 rounded-lg border bg-white px-2 py-4 sm:px-6">
             {productsInCart?.map((product) => (
-              <div class="flex flex-col rounded-lg bg-white sm:flex-row">
+              <div className="flex flex-col rounded-lg bg-white sm:flex-row">
                 <img
-                  class="m-2 h-24 w-28 rounded-md border object-cover object-center"
+                  className="m-2 h-24 w-28 rounded-md border object-cover object-center"
                   src={product.image}
                   alt={product.title}
                 />
-                <div class="flex w-full flex-col px-4 py-4">
-                  <span class="font-semibold">{product.title}</span>
-                  <span class="float-right text-gray-400 flex items-center">
-                    ${product.price}
-                    {" "}x{" "}
-                    {product.quantity}
+                <div className="flex w-full flex-col px-4 py-4">
+                  <span className="font-semibold">{product.title}</span>
+                  <span className="float-right text-gray-400 flex items-center">
+                    ${product.price} x {product.quantity}
                   </span>
-                  <p class="text-lg font-bold">
+                  <p className="text-lg font-bold">
                     ${(product.price * product.quantity).toFixed(2)}
                   </p>
                 </div>
@@ -44,35 +73,37 @@ const Checkout = () => {
             ))}
           </div>
         </div>
-        <div class="mt-10 bg-gray-50 px-4 pt-8 lg:mt-0">
-          <p class="text-xl font-medium">Payment Details</p>
-          <p class="text-gray-400">
+        <div className="mt-10 bg-gray-50 px-4 pt-8 lg:mt-0">
+          <p className="text-xl font-medium">Payment Details</p>
+          <p className="text-gray-400">
             Complete your order by providing your payment details.
           </p>
-          <div class="">
-            <label for="email" class="mt-4 mb-2 block text-sm font-medium">
+          <div className="">
+            <label for="email" className="mt-4 mb-2 block text-sm font-medium">
               Email
             </label>
-            <div class="relative">
+            <div className="relative">
               <input
                 type="text"
                 id="email"
                 name="email"
-                class="w-full rounded-md border border-gray-200 px-4 py-3 pl-11 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500"
+                className="w-full rounded-md border border-gray-200 px-4 py-3 pl-11 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500"
                 placeholder="your.email@gmail.com"
+                onChange={handleChange}
+                required
               />
-              <div class="pointer-events-none absolute inset-y-0 left-0 inline-flex items-center px-3">
+              <div className="pointer-events-none absolute inset-y-0 left-0 inline-flex items-center px-3">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  class="h-4 w-4 text-gray-400"
+                  className="h-4 w-4 text-gray-400"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
-                  stroke-width="2"
+                  strokeWidth="2"
                 >
                   <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
                     d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207"
                   />
                 </svg>
@@ -80,50 +111,61 @@ const Checkout = () => {
             </div>
             <label
               for="card-holder"
-              class="mt-4 mb-2 block text-sm font-medium"
+              className="mt-4 mb-2 block text-sm font-medium"
             >
               Card Holder
             </label>
-            <div class="relative">
+            <div className="relative">
               <input
                 type="text"
                 id="card-holder"
-                name="card-holder"
-                class="w-full rounded-md border border-gray-200 px-4 py-3 pl-11 text-sm uppercase shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500"
+                name="cardHolder"
+                className="w-full rounded-md border border-gray-200 px-4 py-3 pl-11 text-sm uppercase shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500"
                 placeholder="Your full name here"
+                pattern="^[A-Za-z ]{2,}$"
+                title="Name must contain only letters and spaces, minimum 2 characters"
+                onChange={handleChange}
+                required
               />
-              <div class="pointer-events-none absolute inset-y-0 left-0 inline-flex items-center px-3">
+              <div className="pointer-events-none absolute inset-y-0 left-0 inline-flex items-center px-3">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  class="h-4 w-4 text-gray-400"
+                  className="h-4 w-4 text-gray-400"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
-                  stroke-width="2"
+                  strokeWidth="2"
                 >
                   <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
                     d="M15 9h3.75M15 12h3.75M15 15h3.75M4.5 19.5h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5zm6-10.125a1.875 1.875 0 11-3.75 0 1.875 1.875 0 013.75 0zm1.294 6.336a6.721 6.721 0 01-3.17.789 6.721 6.721 0 01-3.168-.789 3.376 3.376 0 016.338 0z"
                   />
                 </svg>
               </div>
             </div>
-            <label for="card-no" class="mt-4 mb-2 block text-sm font-medium">
+            <label
+              for="card-no"
+              className="mt-4 mb-2 block text-sm font-medium"
+            >
               Card Details
             </label>
-            <div class="flex">
-              <div class="relative w-7/12 flex-shrink-0">
+            <div className="flex">
+              <div className="relative w-7/12 flex-shrink-0">
                 <input
                   type="text"
                   id="card-no"
-                  name="card-no"
-                  class="w-full rounded-md border border-gray-200 px-2 py-3 pl-11 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500"
+                  name="cardNumber"
+                  className="w-full rounded-md border border-gray-200 px-2 py-3 pl-11 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500"
                   placeholder="xxxx-xxxx-xxxx-xxxx"
+                  pattern="^\d{4}-\d{4}-\d{4}-\d{4}$"
+                  title="Card number must be in xxxx-xxxx-xxxx-xxxx format"
+                  onChange={handleChange}
+                  required
                 />
-                <div class="pointer-events-none absolute inset-y-0 left-0 inline-flex items-center px-3">
+                <div className="pointer-events-none absolute inset-y-0 left-0 inline-flex items-center px-3">
                   <svg
-                    class="h-4 w-4 text-gray-400"
+                    className="h-4 w-4 text-gray-400"
                     xmlns="http://www.w3.org/2000/svg"
                     width="16"
                     height="16"
@@ -137,74 +179,128 @@ const Checkout = () => {
               </div>
               <input
                 type="text"
-                name="credit-expiry"
-                class="w-full rounded-md border border-gray-200 px-2 py-3 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500"
+                name="expiry"
+                className="w-full rounded-md border border-gray-200 px-2 py-3 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500"
                 placeholder="MM/YY"
+                pattern="^(0[1-9]|1[0-2])\/\d{2}$"
+                title="Expiry must be in MM/YY format (e.g., 09/25)"
+                onChange={handleChange}
+                required
               />
               <input
                 type="text"
-                name="credit-cvc"
-                class="w-1/6 flex-shrink-0 rounded-md border border-gray-200 px-2 py-3 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500"
+                name="cvc"
+                className="w-1/6 flex-shrink-0 rounded-md border border-gray-200 px-2 py-3 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500"
                 placeholder="CVC"
+                pattern="^[0-9]{3,4}$"
+                title="CVC must be 3 or 4 digits"
+                onChange={handleChange}
+                required
               />
             </div>
             <label
               for="billing-address"
-              class="mt-4 mb-2 block text-sm font-medium"
+              className="mt-4 mb-2 block text-sm font-medium"
             >
               Billing Address
             </label>
-            <div class="flex flex-col sm:flex-row">
-              <div class="relative flex-shrink-0 sm:w-7/12">
+            <div className="flex flex-col sm:flex-row">
+              <div className="relative flex-shrink-0 sm:w-7/12">
                 <input
                   type="text"
                   id="billing-address"
-                  name="billing-address"
-                  class="w-full rounded-md border border-gray-200 px-4 py-3 pl-11 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500"
+                  name="address"
+                  className="w-full rounded-md border border-gray-200 px-4 py-3 pl-11 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500"
                   placeholder="Street Address"
+                  onChange={handleChange}
+                  required
                 />
-                <div class="pointer-events-none absolute inset-y-0 left-0 inline-flex items-center px-3">
+                <div className="pointer-events-none absolute inset-y-0 left-0 inline-flex items-center px-3">
                   <img
-                    class="h-4 w-4 object-contain"
+                    className="h-4 w-4 object-contain"
                     src="https://upload.wikimedia.org/wikipedia/en/4/41/Flag_of_India.svg"
                     alt=""
                   />
                 </div>
               </div>
               <select
-                type="text"
-                name="billing-state"
-                class="w-full rounded-md border border-gray-200 px-4 py-3 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500"
+                name="state"
+                className="w-full rounded-md border border-gray-200 px-4 py-3 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500"
+                onChange={handleChange}
+                required
               >
-                <option value="State">State</option>
+                <option value="">Select State</option>
+                <option value="Andhra Pradesh">Andhra Pradesh</option>
+                <option value="Arunachal Pradesh">Arunachal Pradesh</option>
+                <option value="Assam">Assam</option>
+                <option value="Bihar">Bihar</option>
+                <option value="Chhattisgarh">Chhattisgarh</option>
+                <option value="Goa">Goa</option>
+                <option value="Gujarat">Gujarat</option>
+                <option value="Haryana">Haryana</option>
+                <option value="Himachal Pradesh">Himachal Pradesh</option>
+                <option value="Jharkhand">Jharkhand</option>
+                <option value="Karnataka">Karnataka</option>
+                <option value="Kerala">Kerala</option>
+                <option value="Madhya Pradesh">Madhya Pradesh</option>
+                <option value="Maharashtra">Maharashtra</option>
+                <option value="Manipur">Manipur</option>
+                <option value="Meghalaya">Meghalaya</option>
+                <option value="Mizoram">Mizoram</option>
+                <option value="Nagaland">Nagaland</option>
+                <option value="Odisha">Odisha</option>
+                <option value="Punjab">Punjab</option>
+                <option value="Rajasthan">Rajasthan</option>
+                <option value="Sikkim">Sikkim</option>
+                <option value="Tamil Nadu">Tamil Nadu</option>
+                <option value="Telangana">Telangana</option>
+                <option value="Tripura">Tripura</option>
+                <option value="Uttar Pradesh">Uttar Pradesh</option>
+                <option value="Uttarakhand">Uttarakhand</option>
+                <option value="West Bengal">West Bengal</option>
+                <option value="Andaman and Nicobar Islands">
+                  Andaman and Nicobar Islands
+                </option>
+                <option value="Chandigarh">Chandigarh</option>
+                <option value="Dadra and Nagar Haveli and Daman and Diu">
+                  Dadra and Nagar Haveli and Daman and Diu
+                </option>
+                <option value="Delhi">Delhi</option>
+                <option value="Jammu and Kashmir">Jammu and Kashmir</option>
+                <option value="Ladakh">Ladakh</option>
+                <option value="Lakshadweep">Lakshadweep</option>
+                <option value="Puducherry">Puducherry</option>
               </select>
+
               <input
-                type="text"
-                name="billing-zip"
-                class="flex-shrink-0 rounded-md border border-gray-200 px-4 py-3 text-sm shadow-sm outline-none sm:w-1/6 focus:z-10 focus:border-blue-500 focus:ring-blue-500"
+                type="number"
+                name="zip"
+                className="flex-shrink-0 rounded-md border border-gray-200 px-4 py-3 text-sm shadow-sm outline-none sm:w-1/6 focus:z-10 focus:border-blue-500 focus:ring-blue-500"
                 placeholder="ZIP"
+                onChange={handleChange}
+                required
               />
             </div>
 
-            <div class="mt-6 border-t border-b py-2">
-              <div class="flex items-center justify-between">
-                <p class="text-sm font-medium text-gray-900">Subtotal</p>
-                <p class="font-semibold text-gray-900">${totalPrice}</p>
+            <div className="mt-6 border-t border-b py-2">
+              <div className="flex items-center justify-between">
+                <p className="text-sm font-medium text-gray-900">Subtotal</p>
+                <p className="font-semibold text-gray-900">${totalPrice}</p>
               </div>
-              <div class="flex items-center justify-between">
-                <p class="text-sm font-medium text-gray-900">Shipping</p>
-                <p class="font-semibold text-gray-900">${shippingCharge}</p>
+              <div className="flex items-center justify-between">
+                <p className="text-sm font-medium text-gray-900">Shipping</p>
+                <p className="font-semibold text-gray-900">${shippingCharge}</p>
               </div>
             </div>
-            <div class="mt-6 flex items-center justify-between">
-              <p class="text-sm font-medium text-gray-900">Total</p>
-              <p class="text-2xl font-semibold text-gray-900">
+            <div className="mt-6 flex items-center justify-between">
+              <p className="text-sm font-medium text-gray-900">Total</p>
+              <p className="text-2xl font-semibold text-gray-900">
                 ${totalPrice + shippingCharge}
               </p>
             </div>
           </div>
           <button
-            class="mt-4 mb-8 w-full rounded-md bg-sky-700 hover:bg-sky-900 px-6 py-3 font-medium text-white cursor-pointer"
+            className="mt-4 mb-8 w-full rounded-md bg-sky-700 hover:bg-sky-900 px-6 py-3 font-medium text-white cursor-pointer"
             onClick={handleCheckout}
           >
             Place Order

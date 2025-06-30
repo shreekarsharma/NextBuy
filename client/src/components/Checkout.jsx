@@ -1,9 +1,11 @@
-import { FaTimes } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { clearCart } from "../reducers/cartSlice";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import emailjs from "emailjs-com";
+import { useAuth } from "../context/authContext";
 const Checkout = () => {
+  const { user } = useAuth();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const productsInCart = useSelector((state) => state.cart);
@@ -12,6 +14,28 @@ const Checkout = () => {
     0
   );
   const shippingCharge = 8;
+  const emailData = {
+    order_id: Math.floor(100000 + Math.random() * 900000),
+    email: user.emailAddress,
+    cost: {
+      shipping: shippingCharge,
+      total: (totalPrice + shippingCharge).toFixed(2),
+    },
+    orders: productsInCart.map((product) => ({
+      name: product.title,
+      units: product.quantity,
+      image_url: product.image,
+      price: (product.price * product.quantity).toFixed(2),
+    })),
+  };
+  const sendEmail = async () => {
+    await emailjs.send(
+      "service_kislndw",
+      "template_6k1t0n9",
+      emailData,
+      "H9YTp8Rs_c4alkCNZ"
+    );
+  };
   const [form, setForm] = useState({
     email: "",
     cardHolder: "",
@@ -27,11 +51,8 @@ const Checkout = () => {
     setForm((prev) => ({ ...prev, [name]: value }));
   };
   const handleCheckout = () => {
-    const { email, cardHolder, cardNumber, expiry, cvc, address, state, zip } =
-      form;
+    const { cardNumber, expiry, cvc, address, state, zip } = form;
     if (
-      email === "" ||
-      cardHolder === "" ||
       cardNumber === "" ||
       expiry === "" ||
       cvc === "" ||
@@ -42,21 +63,25 @@ const Checkout = () => {
       alert("❌ Please fill in all required fields.");
       return;
     } else {
-      alert("✅ Order Placed Successfully");
+      alert("✅ Order Placed Successfully! Check your email!");
+      sendEmail();
       dispatch(clearCart());
       navigate("/");
     }
   };
   return (
-    <div>
+    <div className="my-10">
       <div className="grid sm:px-10 lg:grid-cols-2 lg:px-20 xl:px-32">
         <div className="px-4 pt-8">
           <p className="text-xl font-medium">Order Summary</p>
-          <div className="mt-8 space-y-3 rounded-lg border bg-white px-2 py-4 sm:px-6">
+          <div className="mt-8 space-y-3 rounded-lg border border-gray-300 bg-white px-2 py-4 sm:px-6">
             {productsInCart?.map((product) => (
-              <div className="flex flex-col rounded-lg bg-white sm:flex-row">
+              <div
+                className="flex flex-col rounded-lg bg-white sm:flex-row"
+                key={product.id}
+              >
                 <img
-                  className="m-2 h-24 w-28 rounded-md border object-cover object-center"
+                  className="m-2 h-24 w-28 object-contain object-center"
                   src={product.image}
                   alt={product.title}
                 />
@@ -79,7 +104,10 @@ const Checkout = () => {
             Complete your order by providing your payment details.
           </p>
           <div className="">
-            <label for="email" className="mt-4 mb-2 block text-sm font-medium">
+            <label
+              htmlFor="email"
+              className="mt-4 mb-2 block text-sm font-medium"
+            >
               Email
             </label>
             <div className="relative">
@@ -87,9 +115,10 @@ const Checkout = () => {
                 type="text"
                 id="email"
                 name="email"
+                defaultValue={user.emailAddress}
                 className="w-full rounded-md border border-gray-200 px-4 py-3 pl-11 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500"
                 placeholder="your.email@gmail.com"
-                onChange={handleChange}
+                readOnly
                 required
               />
               <div className="pointer-events-none absolute inset-y-0 left-0 inline-flex items-center px-3">
@@ -110,7 +139,7 @@ const Checkout = () => {
               </div>
             </div>
             <label
-              for="card-holder"
+              htmlFor="card-holder"
               className="mt-4 mb-2 block text-sm font-medium"
             >
               Card Holder
@@ -124,8 +153,9 @@ const Checkout = () => {
                 placeholder="Your full name here"
                 pattern="^[A-Za-z ]{2,}$"
                 title="Name must contain only letters and spaces, minimum 2 characters"
-                onChange={handleChange}
+                defaultValue={user.fullName}
                 required
+                readOnly
               />
               <div className="pointer-events-none absolute inset-y-0 left-0 inline-flex items-center px-3">
                 <svg
@@ -145,7 +175,7 @@ const Checkout = () => {
               </div>
             </div>
             <label
-              for="card-no"
+              htmlFor="card-no"
               className="mt-4 mb-2 block text-sm font-medium"
             >
               Card Details
@@ -199,7 +229,7 @@ const Checkout = () => {
               />
             </div>
             <label
-              for="billing-address"
+              htmlFor="billing-address"
               className="mt-4 mb-2 block text-sm font-medium"
             >
               Billing Address
@@ -285,7 +315,7 @@ const Checkout = () => {
             <div className="mt-6 border-t border-b py-2">
               <div className="flex items-center justify-between">
                 <p className="text-sm font-medium text-gray-900">Subtotal</p>
-                <p className="font-semibold text-gray-900">${totalPrice}</p>
+                <p className="font-semibold text-gray-900">${totalPrice.toFixed(2)}</p>
               </div>
               <div className="flex items-center justify-between">
                 <p className="text-sm font-medium text-gray-900">Shipping</p>
@@ -295,7 +325,7 @@ const Checkout = () => {
             <div className="mt-6 flex items-center justify-between">
               <p className="text-sm font-medium text-gray-900">Total</p>
               <p className="text-2xl font-semibold text-gray-900">
-                ${totalPrice + shippingCharge}
+                ${(totalPrice + shippingCharge).toFixed(2)}
               </p>
             </div>
           </div>

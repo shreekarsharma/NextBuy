@@ -13,7 +13,7 @@ const Navbar = () => {
     const fetchUser = async () => {
       try {
         const res = await axios.get(
-          `${import.meta.env.VITE_API_BASE_URL}/auth/user/id/${userId}`
+          `https://nextbuy-11x1.onrender.com/api/auth/user/id/${userId}`
         );
         setUserInfo(res.data);
       } catch (error) {
@@ -25,7 +25,7 @@ const Navbar = () => {
   const cartCount = useSelector((state) =>
     state.cart.reduce((total, product) => total + product.quantity, 0)
   );
-  const wishlistCount = useSelector((state) => state.wishlist.length);  
+  const wishlistCount = useSelector((state) => state.wishlist.length);
   return (
     <header className="bg-white text-sky-950 sticky flex flex-col overflow-hidden px-4 py-2 md:flex-row md:items-center shadow top-0 z-50">
       <Link

@@ -20,7 +20,7 @@ const UpdateProfile = () => {
     const fetchUser = async () => {
       try {
         const res = await axios.get(
-          `${import.meta.env.VITE_API_BASE_URL}/auth/user/id/${id}`
+          `https://nextbuy-11x1.onrender.com/api/auth/user/id/${id}`
         );
         setUserData(res.data);
         setForm({
@@ -65,7 +65,7 @@ const UpdateProfile = () => {
         }
 
         const res = await axios.put(
-          `${import.meta.env.VITE_API_BASE_URL}/auth/user/id/${id}`,
+          `https://nextbuy-11x1.onrender.com/api/auth/user/id/${id}`,
           formData,
           { headers: { "Content-Type": "multipart/form-data" } }
         );

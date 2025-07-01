@@ -34,7 +34,7 @@ const Signup = () => {
         return;
       } else {
         await axios.post(
-          `${import.meta.env.VITE_API_BASE_URL}/auth/signup`,
+          `https://nextbuy-11x1.onrender.com/api/auth/signup`,
           formData,
           {
             headers: {

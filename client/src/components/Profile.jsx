@@ -18,7 +18,7 @@ const Profile = () => {
     const fetchUser = async () => {
       try {
         const res = await axios.get(
-          `${import.meta.env.VITE_API_BASE_URL}/auth/user/${userName}`
+          `https://nextbuy-11x1.onrender.com/api/auth/user/${userName}`
         );
         setUser(res.data);
       } catch (error) {
@@ -30,7 +30,9 @@ const Profile = () => {
   }, [userName]);
 
   if (!user)
-    return <div className="text-center mt-10 text-sky-800">Loading profile...</div>;
+    return (
+      <div className="text-center mt-10 text-sky-800">Loading profile...</div>
+    );
 
   return (
     <div className="m-5 sm:m-10">
@@ -47,8 +49,12 @@ const Profile = () => {
           />
         </div>
 
-        <h1 className="text-center text-3xl font-bold text-sky-950">{user.fullName}</h1>
-        <p className="text-center text-md font-medium text-sky-800">{user.emailAddress}</p>
+        <h1 className="text-center text-3xl font-bold text-sky-950">
+          {user.fullName}
+        </h1>
+        <p className="text-center text-md font-medium text-sky-800">
+          {user.emailAddress}
+        </p>
 
         <ul className="mt-3 divide-y rounded bg-gray-100 py-2 px-3 text-gray-600 shadow-sm">
           <li className="flex justify-between py-3 text-sm">

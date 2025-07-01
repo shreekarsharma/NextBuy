@@ -26,7 +26,7 @@ const Login = () => {
         return;
       } else {
         await axios.post(
-          `${import.meta.env.VITE_API_BASE_URL}/auth/login`,
+          `https://nextbuy-11x1.onrender.com/api/auth/login`,
           form
         );
         await login(form);

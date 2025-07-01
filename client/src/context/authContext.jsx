@@ -12,7 +12,7 @@ export const AuthProvider = ({ children }) => {
   const login = async (credentials) => {
     try {
       const res = await fetch(
-        `${import.meta.env.VITE_API_BASE_URL}/auth/login`,
+        `https://nextbuy-11x1.onrender.com/api/auth/login`,
         {
           method: "POST",
           headers: {

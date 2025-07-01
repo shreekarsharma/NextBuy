@@ -167,7 +167,6 @@ const UpdateProfile = () => {
           accept="image/*"
           onChange={handleChange}
           className="mt-2 h-12 w-full rounded-md bg-gray-100 px-3 focus:outline-sky-600"
-          required
         />
       </div>
 

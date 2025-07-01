@@ -18,7 +18,7 @@ const Profile = () => {
     const fetchUser = async () => {
       try {
         const res = await axios.get(
-          `https://nextbuy-11x1.onrender.com/api/auth/user/${userName}`
+          `${import.meta.env.VITE_API_BASE_URL}/auth/user/${userName}`
         );
         setUser(res.data);
       } catch (error) {
@@ -43,13 +43,13 @@ const Profile = () => {
             className="mx-auto h-auto w-full rounded-full border-4 p-1 border-sky-800"
             src={
               user?.profilePhoto
-                ? `${import.meta.env.VITE_API_BASE_URL.replace(
-                    "/api",
-                    ""
-                  )}/${user.profilePhoto.replace(/\\/g, "/")}`
+                ? `https://nextbuy-11x1.onrender.com/${user.profilePhoto.replace(
+                    /\\/g,
+                    "/"
+                  )}`
                 : "/default-avatar.png"
             }
-            alt={user.userName}
+            alt={user?.userName || "User Avatar"}
           />
         </div>
 

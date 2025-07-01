@@ -126,14 +126,15 @@ const Navbar = () => {
                 className="w-10 rounded-full object-contain"
                 src={
                   user?.profilePhoto
-                    ? `${import.meta.env.VITE_API_BASE_URL.replace(
-                        "/api",
-                        ""
-                      )}/${user.profilePhoto.replace(/\\/g, "/")}`
+                    ? `https://nextbuy-11x1.onrender.com/${user.profilePhoto.replace(
+                        /\\/g,
+                        "/"
+                      )}`
                     : "/default-avatar.png"
                 }
                 alt=""
               />
+
               <span className="italic">{userInfo?.userName}</span>
             </Link>
             <button

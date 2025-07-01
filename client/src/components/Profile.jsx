@@ -18,7 +18,7 @@ const Profile = () => {
     const fetchUser = async () => {
       try {
         const res = await axios.get(
-          `${import.meta.env.VITE_API_BASE_URL}/auth/user/${userName}`
+          `https://nextbuy-11x1.onrender.com/api/auth/user/${userName}`
         );
         setUser(res.data);
       } catch (error) {

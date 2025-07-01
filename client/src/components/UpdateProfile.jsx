@@ -54,7 +54,7 @@ const UpdateProfile = () => {
         form.userName === "" ||
         form.emailAddress === "" ||
         form.phoneNumber === "" ||
-        !form.profilePhoto
+        (!form.profilePhoto && !userData.profilePhoto)
       ) {
         alert("Please fill the details");
         return;

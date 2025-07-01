@@ -41,10 +41,14 @@ const Profile = () => {
           <span className="absolute right-0 m-3 h-3 w-3 rounded-full bg-green-500 ring-2 ring-green-300 ring-offset-2"></span>
           <img
             className="mx-auto h-auto w-full rounded-full border-4 p-1 border-sky-800"
-            src={`${import.meta.env.VITE_API_BASE_URL.replace(
-              "/api",
-              ""
-            )}/${user.profilePhoto.replace(/\\/g, "/")}`}
+            src={
+              user?.profilePhoto
+                ? `${import.meta.env.VITE_API_BASE_URL.replace(
+                    "/api",
+                    ""
+                  )}/${user.profilePhoto.replace(/\\/g, "/")}`
+                : "/default-avatar.png"
+            }
             alt={user.userName}
           />
         </div>

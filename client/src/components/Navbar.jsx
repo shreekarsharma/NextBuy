@@ -124,10 +124,14 @@ const Navbar = () => {
             >
               <img
                 className="w-10 rounded-full object-contain"
-                src={`${import.meta.env.VITE_API_BASE_URL.replace(
-                  "/api",
-                  ""
-                )}/${userInfo?.profilePhoto.replace(/\\/g, "/")}`}
+                src={
+                  user?.profilePhoto
+                    ? `${import.meta.env.VITE_API_BASE_URL.replace(
+                        "/api",
+                        ""
+                      )}/${user.profilePhoto.replace(/\\/g, "/")}`
+                    : "/default-avatar.png"
+                }
                 alt=""
               />
               <span className="italic">{userInfo?.userName}</span>

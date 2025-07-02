@@ -10,6 +10,7 @@ import Profile from "./components/Profile";
 import Checkout from "./components/Checkout";
 import ProtectedRoutes from "./components/ProtectedRoutes";
 import UpdateProfile from "./components/UpdateProfile";
+import Footer from "./components/Footer";
 
 const App = () => {
   return (
@@ -75,6 +76,7 @@ const App = () => {
         <Route path="/login" element={<Login />}></Route>
         <Route path="/signup" element={<Signup />}></Route>
       </Routes>
+      <Footer/>
     </BrowserRouter>
   );
 };

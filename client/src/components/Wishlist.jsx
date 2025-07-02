@@ -6,16 +6,17 @@ const Wishlist = () => {
   const wishListProducts = useSelector((state) => state.wishlist);
   const dispatch = useDispatch();
 
-
   if (wishListProducts.length < 1) {
     return (
-      <p className="text-center mt-10 text-xl font-medium text-sky-950">
-        Your wishlist is empty
-      </p>
+      <div className="mb-100">
+        <p className="text-center mt-10 text-xl font-medium text-sky-950">
+          Your wishlist is empty
+        </p>
+      </div>
     );
   } else {
     return (
-      <section className="h-screen bg-gray-100 py-12 sm:py-16 lg:py-20">
+      <section className="h-full bg-gray-100 py-12 sm:py-16 lg:py-20">
         <div className="mx-auto px-4 sm:px-6 lg:px-8">
           <div className="mx-auto max-w-2xl">
             <div className="flex justify-between items-end">

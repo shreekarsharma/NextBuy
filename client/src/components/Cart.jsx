@@ -28,9 +28,11 @@ const Cart = () => {
   const shippingCharge = 8;
   if (productsInCart.length < 1) {
     return (
-      <p className="text-center mt-10 text-2xl font-medium text-sky-950">
-        Your cart is empty
-      </p>
+      <div className="mb-100">
+        <p className="text-center mt-10 text-xl font-medium text-sky-950">
+          Your cart is empty
+        </p>
+      </div>
     );
   } else {
     return (
